@@ -1,0 +1,25 @@
+{
+    "data": [
+    {
+    "chatName": "First",
+    "messages": [{"userId": 1, "textMessage": "What can you do?"},  {"userId": 2, "textMessage": "Everything."}]
+    },
+    {
+    "chatName": "Second",
+    "messages": [{"userId": 1, "textMessage": "Nothing"},  {"userId": 2, "textMessage": "Everything"}]
+    }
+    ],
+    "users": [
+        {
+        "userName": "You",
+        "id": 1,
+        "avatar": "https://i.pinimg.com/550x/e7/eb/1f/e7eb1fcf037699e7de777073d1bafd62.jpg",
+        "profileName": "Ivan Vorobei"
+        },
+        {
+        "userName": "ChatGPT",
+        "id": 2,
+        "avatar": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/768px-ChatGPT_logo.svg.png"
+        }
+    ]
+}    
