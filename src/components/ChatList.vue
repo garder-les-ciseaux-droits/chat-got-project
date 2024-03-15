@@ -1,32 +1,62 @@
 <template>
-        <div class="dark flex-shrink-0 overflow-x-hidden bg-[#0d0d0d]" :style="classWidth" @click="hideDeleteMenu">
+        <div class="dark flex w-full shrink-0 overflow-x-hidden bg-[#0d0d0d]" :style="classWidth" @click="hideDeleteMenu">
             <div class="h-full w-[260px]">
-                <div class="flex h-full min-h-0 flex-col">
-                    <div class="scrollbar-trigger relative h-full w-full flex-1 items-start border-white/20">
-                        <nav class="flex h-full w-full flex-col px-3 pb-3.5">
+                <div class="flex h-full flex-col">
+                    <div class="relative h-full w-full flex-1 tems-start border-white/20">
+                        <nav class="flex h-full w-full flex-col px-3 pb-3.5 place-items-center">
                             <div class="text-white">
-                                <button id="topButton" class="rounded-[8px] hover:bg-white hover:bg-opacity-20" @click="createNewChat">
-                                        New Chat           
+                                <button id="topButton" class="rounded-[8px] hover:bg-white hover:bg-opacity-10 flex space-x-2  place-items-center" @click="createNewChat">
+                                    <div class="bg-white border-1 rounded-[50%] w-8 h-8 flex justify-center place-items-center">
+                                        <img class="flex w-5 h-5" src="https://freelogopng.com/images/all_img/1681038325chatgpt-logo-transparent.png">
+                                    </div>
+                                    <div class="text-sm flex">New Chat</div>          
                                 </button>
                             </div>
-                            <div class="text-white flex flex-col-reverse" id="yourChatList">
-                                <button id="allButtons" class="flex-col-reverse relative button rounded-[8px] hover:bg-white hover:bg-opacity-20" v-for="userChat,i in dataHistory.data" :key="userChat.id" @click="show(userChat.chatName, $event)" @mouseover="showDeleteButton(i)" @mouseleave="hideDeleteButton(i)">
-                                    {{ userChat.chatName }}
-                                    <button class="absolute top-0 right-0 mr-3 text-xl" v-if="deleteButtons[i]" @click.stop="showDeleteMenu(i)">...
-                                        
-                                    </button>
-                                    <div>
-                                        <div class="fixed border flex place-items-center  border-white/[.15] rounded-lg bg-[#171717] ml-[150px] w-[150px] h-[116px]" v-if="deleteMenuButtons[i]">
-                                            <div class="flex flex-col items-start">
-                                                <button class="text-white mb-2 ml-5">Share</button>
-                                                <button class="text-white mb-2 ml-5">Rename</button>
-                                                <button class="text-red-500 ml-5" @click="deleteChat(i)">Delete</button>
-                                            </div>
-                                        </div>    
-                                    </div> 
-                                </button>
-                            </div>
-                                                 
+                            <div class="text-white w-full place-items-start flex justify-center h-[96rem] mb-36 overflow-y-scroll  space-y-4" id="allButtons">
+                                <div class="flex-col">
+                                    <div v-show="dataHistory.data.find(c => c.date === getDate.today)" class="mb-4">
+                                        <div>
+                                            <p class="text-xs text-white/[.65] ml-2">Today</p>
+                                        </div>
+                                        <div class="flex flex-col-reverse relative mt-4">
+                                            <button id="allButtons" class="relative button buttonsToday rounded-[8px] hover:bg-white hover:bg-opacity-10" v-show="userChat.date === getDate.today"  v-for="(userChat,index) in dataHistory.data" :key="index" @click="show(userChat.chatName, $event, index)" @mouseover="showDeleteButton(index)" @mouseleave="hideDeleteButton(index)">
+                                                {{ userChat.chatName }}
+                                                <button class="absolute top-0 right-0 mr-3 text-xl" v-if="deleteButtons[index]"  @click.stop="showDeleteMenu(index)">...</button>
+                                                <div>
+                                                    <div class="fixed z-50 bsolute border flex place-items-center  border-white/[.15] rounded-lg bg-[#171717] ml-[150px] w-[150px] h-[116px]" v-if="deleteMenuButtons[index]">
+                                                        <div class="flex flex-col items-start">
+                                                            <button class="text-white mb-2 ml-5">Share</button>
+                                                            <button class="text-white mb-2 ml-5">Rename</button>
+                                                            <button class="text-red-500 ml-5" @click="deleteChat(index)">Delete</button>
+                                                        </div>
+                                                    </div>    
+                                                </div> 
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div v-show="dataHistory.data.find(c => c.date === getDate.yesterday)">
+                                        <div>
+                                            <p class="text-xs text-white/[.65] ml-2">Yesterday</p>
+                                        </div>
+                                        <div class="flex flex-col-reverse relative mt-4">
+                                        <button id="allButtons" class="relative button buttonsToday rounded-[8px] hover:bg-white hover:bg-opacity-10" v-show="userChat.date === getDate.yesterday"  v-for="(userChat,index) in dataHistory.data" :key="index" @click="show(userChat.chatName, $event, index)" @mouseenter="showDeleteButton(index)" @mouseleave="hideDeleteButton(index)">
+                                            {{ userChat.chatName }}
+                                            <button class="absolute top-0 right-0 mr-3 text-xl" v-if="deleteButtons[index]"  @click.stop="showDeleteMenu(index)">...</button>
+                                            <div>
+                                                <div class="fixed z-50 border flex place-items-center  border-white/[.15] rounded-lg bg-[#171717] ml-[150px] w-[150px] h-[116px]" v-if="deleteMenuButtons[index]">
+                                                    <div class="flex flex-col items-start">
+                                                        <button class="text-white mb-2 ml-5">Share</button>
+                                                        <button class="text-white mb-2 ml-5">Rename</button>
+                                                        <button class="text-red-500 ml-5" @click="deleteChat(index)">Delete</button>
+                                                    </div>
+                                                </div>    
+                                            </div> 
+                                        </button>
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                            </div>                
                         </nav>                    
                     </div>
                 </div>      
@@ -55,7 +85,7 @@
                     </span>
             </button>
         </div>
-        <UserInteraction :shown-chat-name="visibleChatName" @click="hideDeleteMenu"/>    
+        <UserInteraction :shown-chat-name="visibleChatName" @click="hideDeleteMenu"/>   
 </template>
 
 <script>
@@ -72,39 +102,75 @@ export default {
             dataHistory: json,
             classWidth: {width: '260px'},
             anotherClassWidth: {width:'260px', height: '100px'},
-            chatListShown: true,
+            chatListShown:  true,
             deleteButtons: Array(json.data.length).fill(false),
             deleteMenuButtons: Array(json.data.length).fill(false),
+            shownDeleteButton: false,
+            
+        }
+    },
+    computed: {
+        getDate(){
+            const currentDate = new Date();
+            const day = currentDate.getDate();
+            const month = currentDate.getMonth() + 1;
+            const year = currentDate.getFullYear();
+            const todayDate = `${day}.${month}.${year}`;
+
+            const yesterday = new Date(currentDate); 
+            yesterday.setDate(yesterday.getDate() - 1);
+
+
+            const yday = yesterday.getDate()
+            const ymonth = yesterday.getMonth() + 1;
+            const yyear = yesterday.getFullYear();
+            const yesterdayDate = `${yday}.${ymonth}.${yyear}`;
+
+            let dates = {
+                today: "",
+                yesterday: "",
+                
+            }
+
+            dates.today = todayDate
+            dates.yesterday = yesterdayDate
+
+            return dates
         }
     },
     methods: {
+
         userById(userId) {
           return this.dataHistory.users.find(u => u.id === userId );
         },
         afterButtonAdded(){
-            const buttons = document.querySelectorAll('#allButtons');
+            const buttons = document.querySelectorAll('.buttonsToday');
+
+            buttons[buttons.length - 1].classList.toggle('active')
+            
+        },
+        createNewChat() {
+            let buttons = document.querySelectorAll('#allButtons');
             buttons.forEach((button) => {
                 button.classList.remove('active')
             })
-            buttons[buttons.length - 1].classList.toggle('active')
+            this.visibleChatName = 'Welcome'
+            
         },
-        createNewChat() {
-            let newChatName = `NewChat${String(this.dataHistory.data.length)}`
-            this.dataHistory.data.push({chatName: newChatName, messages: []})
-            this.visibleChatName = newChatName
-            setTimeout(this.afterButtonAdded, 0);
-        },
-        show(name, event) {
+        show(name, event, i) {
             this.visibleChatName = name
             const buttons = document.querySelectorAll('#allButtons');
+           
             buttons.forEach((button) => {
                 button.classList.remove('active')
             })
             event.target.classList.toggle('active')
+            
             console.log(buttons[buttons.length - 1])
         },
         deleteChat(index) {
             this.dataHistory.data.splice(index, 1)
+            this.deleteButtons.fill(false)
             this.visibleChatName = 'Welcome'
         },
         showChatList(){
@@ -137,10 +203,11 @@ export default {
             sidebarDown.style.transform = "translateY(-0.15rem) rotate(0deg) translateZ(0px)" 
         },
         showDeleteButton(index) {
-            this.deleteButtons[index] = true;
+                this.deleteButtons[index] = true
+
         },
         hideDeleteButton(index) {
-            this.deleteButtons[index] = false;
+                this.deleteButtons[index] = false
         },
         showDeleteMenu(index) {
             this.deleteMenuButtons.fill(false)
@@ -153,12 +220,17 @@ export default {
     watch: {
         'dataHistory.data.length': function(newVal, oldVal){
             if(newVal > oldVal){
-                this.visibleChatName = this.dataHistory.data.at(-1).chatName
                 setTimeout(this.afterButtonAdded, 0);
-            }
+                this.visibleChatName = this.dataHistory.data.at(-1).chatName
+               
+                
+            }   
+            
+           
         }
        
-    }
+    },
+
 
 }
 </script>
@@ -186,7 +258,7 @@ export default {
 
 #topButton {
     width: 220px;
-    margin-top: 30px;
+    margin-top: 15px;
     height: 45px;
     margin-bottom:30px; 
     text-align: left;

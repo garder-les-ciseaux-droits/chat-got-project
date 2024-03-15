@@ -2,7 +2,7 @@ from flask import *
 from flask_cors import CORS, cross_origin
 import json, time
 from llama_cpp import Llama
-m_path = '/Users/evanvosh/Documents/chat-gpt-project/backend/model/vicuna-7b-1.1.ggmlv3.q4_0.bin'
+m_path = '/Users/evanvosh/Documents/chat-gpt-project/backend/model/llama-2-7b-chat.Q4_0.gguf'
 llm = Llama(model_path=m_path)
 
 with open("/Users/evanvosh/Documents/chat-gpt-project/backend/model/BabyFile.txt", "r") as f:
