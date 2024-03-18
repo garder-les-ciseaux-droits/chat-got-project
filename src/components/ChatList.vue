@@ -85,7 +85,7 @@
                     </span>
             </button>
         </div>
-        <UserInteraction :shown-chat-name="visibleChatName" @click="hideDeleteMenu"/>   
+        
 </template>
 
 <script>
