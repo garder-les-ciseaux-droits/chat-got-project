@@ -85,7 +85,7 @@
                     </span>
             </button>
         </div>
-        
+        <UserInteraction :shownChatName="visibleChatName"/>
 </template>
 
 <script>
