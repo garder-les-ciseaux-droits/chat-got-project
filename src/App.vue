@@ -1,14 +1,21 @@
 <template>
-  <div class="relative z-0 flex h-full w-full overflow-hidden">
-    <ChatList />
+  <div class="h-screen w-screen overflow-y-auto flex bg-[#212121]">
+    <!-- <ChatList class="w-full h-full" /> -->
+    <div class="w-full h-full">
+      <NewChatList/>
+    </div>
+
   </div>
 </template>
 <script>
 import ChatList from '/src/components/ChatList.vue'
+import NewChatList from '/src/components/NewChatList.vue'
+
 
 export default {
   components: {
-    ChatList: ChatList
+    ChatList,
+    NewChatList
   },
   data() {
     return {
@@ -27,8 +34,5 @@ export default {
 
 
 <style>
-body {
-    background-color: #171717;
-    margin: 0;
-}
+
 </style>

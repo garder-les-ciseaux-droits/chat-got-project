@@ -1,8 +1,7 @@
 <template>
-        <div class="dark flex w-full shrink-0 overflow-x-hidden bg-[#0d0d0d]" :style="classWidth" @click="hideDeleteMenu">
-            <div class="h-full w-[260px]">
-                <div class="flex h-full flex-col">
-                    <div class="relative h-full w-full flex-1 tems-start border-white/20">
+        <div class="w-full h-full overflow-x-hidden overflow-y-hidden bg-[#0d0d0d] min-w-0 flex flex-col" :style="classWidth" @click="hideDeleteMenu">
+            <div class="h-full w-[260px] flex flex-col">
+                    <div class="h-full w-full items-start border-white/20">
                         <nav class="flex h-full w-full flex-col px-3 pb-3.5 place-items-center">
                             <div class="text-white">
                                 <button id="topButton" class="rounded-[8px] hover:bg-white hover:bg-opacity-10 flex space-x-2  place-items-center" @click="createNewChat">
@@ -12,7 +11,7 @@
                                     <div class="text-sm flex">New Chat</div>          
                                 </button>
                             </div>
-                            <div class="text-white w-full place-items-start flex justify-center h-[96rem] mb-36 overflow-y-scroll  space-y-4" id="allButtons">
+                            <div class="text-white w-full place-items-start flex justify-center h-[96rem] mb-36 overflow-auto overflow-x-hidden  space-y-4" id="allButtons">
                                 <div class="flex-col">
                                     <div v-show="dataHistory.data.find(c => c.date === getDate.today)" class="mb-4">
                                         <div>
@@ -58,11 +57,14 @@
                                 </div>
                             </div>                
                         </nav>                    
-                    </div>
-                </div>      
+                    </div> 
+                    
+            </div>
+            <div class="w-full h-[50px] bg-white">
+                <p>hi</p>
             </div>
         </div>
-        <div v-show="chatListShown" class="text-white dark flex flex-col justify-center bg-[#0d0d0d] absolute bottom-0 items-center mb-3" :style="anotherClassWidth">
+        <!-- <div v-show="chatListShown" class="text-white dark flex flex-col justify-center bg-[#0d0d0d] items-center mb-3" :style="anotherClassWidth">
             <button class="buttonProfile rounded-[8px] hover:bg-white hover:bg-opacity-20 flex justify-items-start">
                 <span class="font-bold text-xs">Upgrade plan</span>
                 <span class="text-xs">Get GPT-4, DALL·E, and more</span>
@@ -71,8 +73,8 @@
                 <img class="avatar-small" :src="userById(1).avatar">
                 <span class="text-xs mt-2 font-bold flex"> {{ userById(1).profileName}}</span>
             </button>
-        </div>
-        <div class="text-white flex justify-center items-center ml-1.5">
+        </div> -->
+        <!-- <div class="text-white flex justify-center items-center ml-1.5">
             <button @click="showChatList" @mouseover="sidebarOver" @mouseleave="sidebarLeave">
                     <div id="sidebarContainer" class="flex h-6 w-6 flex-col items-center opacity-25 hover:opacity-100">
                         <div id="sidebarUp" class="h-3 w-1 bg-white rounded-full bg-token-text-primary" style="transform: translateY(0.15rem) rotate(0deg) translateZ(0px);">
@@ -85,7 +87,7 @@
                     </span>
             </button>
         </div>
-        <UserInteraction :shownChatName="visibleChatName"/>
+        <UserInteraction :shownChatName="visibleChatName" @click="hideDeleteMenu"/> -->
 </template>
 
 <script>
@@ -169,9 +171,9 @@ export default {
             console.log(buttons[buttons.length - 1])
         },
         deleteChat(index) {
-            this.dataHistory.data.splice(index, 1)
-            this.deleteButtons.fill(false)
-            this.visibleChatName = 'Welcome'
+            this.dataHistory.data.splice(index, 1);
+            this.deleteButtons.fill(false);
+            this.visibleChatName = 'Welcome';
         },
         showChatList(){
             const sideBarCon = document.getElementById('sidebarContainer')
@@ -236,6 +238,22 @@ export default {
 </script>
 
 <style>
+::-webkit-scrollbar {
+  width: 12px; /* Ширина полосы */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(241, 241, 241, 0); /* Прозрачный цвет фона трека */
+}
+
+
+
+/* Подсветка при наведении курсора */
+::-webkit-scrollbar-thumb:hover {
+  background: #020202;
+  border-radius: 6px;
+}
+
 .button {
     width: 220px;
     height: 40px;

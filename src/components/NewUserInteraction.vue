@@ -1,9 +1,27 @@
 <template>
-    <div class=" w-full min-w-0">
-        <div class="text-white top-0 border border-white/[.15] w-36 h-11 mt-2 text-xl flex justify-center bg-white bg-opacity-15 min-w-0">
-            <button @click="showGptMenu"> ChatGPT{{ picked }} </button>
-            <div v-show="gptModulesView" class="text-white fixed w-80 h-48 mt-12 ml-44 border border-white/[.15] bg-[#2d2d2d] rounded-lg flex">
-                <div class="flex flex-col grow mx-2 my-2 w-screen space-y-0.5 text-sm">
+        <div class="w-full h-[50px] flex items-center justify-center md:mt-2 border-b border-white/15 md:border-0">
+            <div class="flex w-full h-full justify-center">
+                <div class="inline-block md:hidden w-10 flex items-center justify-start ml-4">
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="w-full h-full flex justify-center md:justify-start">
+                    <button class="text-white text-xl bg-[#212121] w-36 h-11 rounded-xl hover:bg-white hover:bg-opacity-5" @click="showGptMenu">
+                        <div class="w-full h-full flex items-center justify-center space-x-1">
+                            <p class="text-base">ChatGPT  </p>
+                            <p class="text-base text-white/75">{{ picked }}</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-3 h-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+
+                        </div>
+                       
+                    </button>
+                    <div v-show="gptModulesView" class="text-white w-80 h-48 mt-12 fixed border border-white/[.15] bg-[#2d2d2d] rounded-lg flex">
+                <div class="flex flex-col mx-2 my-2 w-full justify-center space-y-0.5 text-sm">
                     <button class="flex hover:bg-white hover:bg-opacity-10 rounded pl-2 space-y-0.5 items-center w-full h-24" @click="picked = 3.5">
                         <div class="flex items-center">
                             <div class="flex flex-col text-left">
@@ -29,57 +47,87 @@
                             </div>
                         </div>
                     </button>
-                   
                 </div>
-                  
-            </div>
-        </div>
-        <div class="flex h-screen place-items-center justify-center flex-col min-w-0">
-            <div v-if="shownChatName === 'Welcome' || (dataHistory.data.find(c => c.chatName === shownChatName).messages.length === 0)" class="flex place-items-center justify-center w-full h-screen flex-col">
-                <div class="mb-1 bg-white border-1 rounded-[50%] w-12 h-12 flex justify-center place-items-center">
-                    <img class="flex w-8 h-8" src="https://freelogopng.com/images/all_img/1681038325chatgpt-logo-transparent.png">
-                </div>
-                <div>
-                    <p id="topText" class="flex text-white">How can I help you today?</p>
-                </div>
-            </div>
-            <div v-else class="flex place-items-center w-full h-[630px] mb-15 mt-10 flex-col overflow-y-auto overflow-x-hidden min-w-0">
-                <div class="w-[47rem] justify-center text-left">
-                    <div class="mb-5 text-white"  v-for="mess in ourArray(shownChatName).messages" :key="mess.id">
-                        <img class="float-left w-6 h-6 rounded-xl mr-4 flex" :src="userById(mess.userId).avatar">
-                        <div class="flex flex-col">
-                            <p class="flex">
-                                {{ userById(mess.userId).userName }}
-                            </p>
-                            <p class="flex" v-html="replaceCodeWithHTML(mess.textMessage)"></p>
-                        </div>
-                            
                     </div>
                 </div>
-            </div>
-            <div v-show="shownChatName === 'Welcome'" class="flex w-full justify-center mb-5 min-w-0">
-                <div class="grid grid-cols-2 gap-4 w-[46rem] text-white">
-                    <button class="col-span-1 p-4 border border-white/[.15] h-16 bg-[#171717] space-y-0.5  rounded-xl text-left text-xs hover:bg-white hover:bg-opacity-20" v-for="prompt in recommendedPropmts" :key="prompt.id" @click="sendRecPrompt(prompt)">
-                        <h1 class="font-bold">{{prompt.title}}</h1>
-                        <p class="text-white/[.45]">{{ prompt.text }}</p>
+                <div class="w-10 h-full flex justify-end items-center mr-4 inline-block md:hidden">
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                        </svg>
                     </button>
                 </div>
             </div>
-            <div v-if="picked === 3.5" class="flex grow w-full justify-center mb-16 flex-col place-items-center bottom-0 min-w-0">
-                <div class="flex justify-center place-items-center w-[48rem] h-[55px] text-white border border-white/[.15] rounded-2xl bottom-0 min-w-0">
-                    <input id="mainInput" type="text" placeHolder="Message your GPT" v-model="userMessage" @keyup.enter="send(shownChatName)">
-                    <button :class="lightTheButton" class="flex place-items-center justify-center min-w-0 w-9 h-9 rounded-xl mr-3" id="myButtonS" type="button" @click="send(shownChatName)">
-                        <img class="w-4 h-4 flex" :src="'https://uxwing.com/wp-content/themes/uxwing/download/arrow-direction/up-arrow-icon.png'">
+
+            
+        </div>
+        <div class="w-full h-[630px] flex justify-center min-h-0 min-w-0" @click="hideGptMenu">
+            <div class="flex w-full h-full min-h-0 min-w-0 items-center justify-center">
+                <div v-if="shownChatName === 'Welcome' || (dataHistory.data.find(c => c.chatName === shownChatName).messages.length === 0)" class="flex flex-col items-center justify-center w-full h-full space-y-2">
+                    <div class="flex flex-col items-center h-[500px] justify-center pt-24 space-y-2">
+                        <div class="mb-1 bg-white border-1 rounded-[50%] w-12 h-12 flex justify-center items-center">
+                            <img class="flex w-8 h-8 min-w-0 min-h-0" src="https://freelogopng.com/images/all_img/1681038325chatgpt-logo-transparent.png">
+                        </div>
+                        <div>
+                            <p id="topText" class="flex text-white text-2xl">How can I help you today?</p>
+                        </div>
+                    </div>
+                    <div class="flex w-full justify-center pb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-1 w-[46rem] text-white h-full min-h-0 min-w-0 justify-center items-center mx-4">
+                            <button class="min-w-0 flex flex-col justify-center p-4 border border-white/[.15] bg-[#212121] rounded-xl text-left text-xs hover:bg-white hover:bg-opacity-20" v-for="prompt in recommendedPropmts" :key="prompt.id" @click="sendRecPrompt(prompt)">
+                                <h1 class="font-bold">{{prompt.title}}</h1>
+                                <p class="text-white/[.45]">{{ prompt.text }}</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="w-full h-[32rem] flex flex-col overflow-x-hidden overflow-y-scroll min-w-0 items-center space-y-10">
+                    <div class="w-full h-auto flex items-center justify-start mt-4 min-w-0 px-10 md:px-0 md:max-w-[44.5rem]"  v-for="mess in ourArray(shownChatName).messages" :key="mess.id">
+                        <div class="flex ">
+                            <div class="w-6 h-6 shrink-0">
+                                <img class="rounded-xl" :src="userById(mess.userId).avatar"> 
+                            </div> 
+                            <div class="flex flex-col ml-4 text-white justify-start">
+                                <p>
+                                    {{ userById(mess.userId).userName }}
+                                </p>
+                                <p v-html="replaceCodeWithHTML(mess.textMessage)"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div v-else  class="w-full h-full py-4 flex justify-center min-w-0 items-start min-w-0">
+                    
+                    <div class="w-full h-full flex flex-col items-center min-w-0 overflow-y-scroll overflow-x-hidden space-y-8">
+                        <div class="flex w-[44rem] h-auto space-x-3" v-for="mess in ourArray(shownChatName).messages" :key="mess.id">
+                            <img class="rounded-xl w-6 h-6 mt-[0.07rem]" :src="userById(mess.userId).avatar"> 
+                            <div class="flex flex-col justify-start space-y-2">
+                                <p class="font-semibold text-white">
+                                    {{ userById(mess.userId).userName }}
+                                </p>
+                                <p class="text-white" v-html="replaceCodeWithHTML(mess.textMessage)"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            
+        </div>
+        <div class="w-full h-[90px] flex justify-center items-center min-w-0" @click="hideGptMenu">
+            <div v-if="picked === 3.5" class="flex flex-col w-[48rem] h-[80px] justify-center items-center min-w-0 min-h-0 space-y-4 mb-4 mx-4 md:mx-0">
+                <div class="flex items-center w-full h-[55px] bg-[#34344200] text-white border border-white/[.15] rounded-2xl min-h-0 min-w-0">
+                    <input class="w-full h-full bg-[#34344200] outline-none pl-[15px] min-w-0 min-h-0" type="text" placeHolder="Message your GPT" v-model="userMessage" @keyup.enter="send(shownChatName)">
+                    <button :class="lightTheButton" class="flex items-center justify-center min-w-0 w-9 h-9 rounded-xl mr-3 min-w-0 min-h-0" id="myButtonS" type="button" @click="send(shownChatName)">
+                        <img class="w-4 h-4 flex min-w-0 min-h-0" :src="'https://uxwing.com/wp-content/themes/uxwing/download/arrow-direction/up-arrow-icon.png'">
                     </button>
                 </div>
-                <div class="flex bottom-0 mt-5 text-xs text-gray-300 min-w-0">
-                    <span>ChatGPT can make mistakes. Consider checking important information.</span>
+                <div class="flex w-full h-[10px] items-center justify-center min-w-0 min-h-0">
+                    <p class="text-xs text-gray-300 min-w-0 min-h-0">ChatGPT can make mistakes. Consider checking important information.</p>
                 </div>
             </div>
-            <div v-else class="flex w-full justify-center mb-16 flex-col place-items-center bottom-0 min-w-0">
-                <div class="flex justify-center w-[48rem] text-white border border-white/[.15] rounded-2xl bottom-0 flex-col" :style="containerHeight">
+            <div v-else class="flex flex-col w-[48rem] h-[80px] justify-center items-center min-w-0 min-h-0 mb-4 space-y-4 mb-4 mx-4 md:mx-0">
+                <div class="flex items-center w-full h-[55px] bg-[#34344200] text-white border border-white/[.15] rounded-2xl min-h-0 min-w-0" :style="containerHeight">
                     <div class="flex ml-4 mt-4" v-show="fileReady">
-                       
                         <div class="flex w-56 h-14 border border-white/[.25] rounded-xl bg-[#34344200] text-white place-items-center" @mouseenter="deleteButton = true" @mouseleave="deleteButton = false">
                             <div  v-show="deleteButton" class="absolute mb-12 ml-52 border bg-[#414141] border-white/[.25] rounded-xl w-5 h-5 flex justify-center">
                                 <button @click="deleteChosenFile">
@@ -105,13 +153,14 @@
                         </button>
                     </div>
                 </div>
-                <div class="flex bottom-0 mt-5 text-xs text-gray-300">
-                    <span>ChatGPT can make mistakes. Consider checking important information.</span>
+                <div class="flex w-full  h-[10px] items-center justify-center min-w-0 min-h-0">
+                    <p class="text-xs text-gray-300 min-w-0 min-h-0">ChatGPT can make mistakes. Consider checking important information.</p>
                 </div>
             </div>
         </div>
-    </div>    
+
 </template>
+
 
 <script>
 import axios from "axios"
@@ -136,6 +185,9 @@ export default {
         }
     },
     methods: {
+        hideGptMenu(){
+            if (this.gptModulesView) this.gptModulesView = !this.gptModulesView;
+        },
         userById(userId) {
           return this.dataHistory.users.find(u => u.id === userId );
         },
@@ -298,7 +350,7 @@ export default {
             for (let i = 0; i < parts.length; i++) {    
                 
                 if (i % 2 !== 0) {
-                    result += "<code class='w-[44rem] h-auto py-5 pl-4 mt-3 mb-3 bg-black'>" + parts[i].trim(   ) + "</code>";
+                    result += "<code class='w-full md:w-[42rem] h-full py-5 pl-4 mt-3 mb-3 bg-black'>" + parts[i].trim(   ) + "</code>";
                 } else {
                    
                     result += "<p class='break-all'>" + parts[i].trim() + "</p>\n";
@@ -357,56 +409,11 @@ export default {
 </script>
 
 <style>
-
-
-
-
-.icon-small {
-    width: 45px;
-    height: 45px;
-    background-color: white;
-    border-radius: 50%;
-    border-width: 7px;
-    margin-bottom: 10px;
+::-webkit-scrollbar {
+  width: 12px;
 }
 
-.pre-formatted {
-  white-space: pre;
-}
-
-
-
-.user-name {
-    font-weight: bold; 
-}
-
-
-
-#myContainer {
-    width: calc(100% - 150px);
-    padding: 20px;
-    text-align: left;
-    padding: 50px;
-    position: fixed;
-    margin-top: 20px;
-    bottom: 0px;
-}
-
-#myInput {
-    background-color:#34344200;
-    width: 100%;
-    position: relative;
-    border-radius: 18px;
-    border: 1px solid rgb(143, 143, 143);
-    height: 60px;
-}    
-
-#mainInput{
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    background-color: #34344200;
-    height: 55px;
-    outline: none; 
+::-webkit-scrollbar-track {
+  background: rgba(241, 241, 241, 0);
 }
 </style>
