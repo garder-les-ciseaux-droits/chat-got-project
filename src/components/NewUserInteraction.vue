@@ -1,5 +1,5 @@
 <template>
-        <div class="w-full h-[50px] flex items-center justify-center md:mt-2 border-b border-white/15 md:border-0">
+        <div class="relative w-full h-[50px] flex items-center justify-center md:mt-2 border-b border-white/15 md:border-0">
             <div class="flex w-full h-full justify-center">
                 <div class="inline-block md:hidden w-10 flex items-center justify-start ml-4">
                     <button>
@@ -63,20 +63,20 @@
         </div>
         <div class="w-full h-[630px] flex justify-center min-h-0 min-w-0" @click="hideGptMenu">
             <div class="flex w-full h-full min-h-0 min-w-0 items-center justify-center">
-                <div v-if="shownChatName === 'Welcome' || (dataHistory.data.find(c => c.chatName === shownChatName).messages.length === 0)" class="flex flex-col items-center justify-center w-full h-full space-y-2">
-                    <div class="flex flex-col items-center h-[500px] justify-center pt-24 space-y-2">
-                        <div class="mb-1 bg-white border-1 rounded-[50%] w-12 h-12 flex justify-center items-center">
+                <div v-if="shownChatName === 'Welcome' || (dataHistory.data.find(c => c.chatName === shownChatName).messages.length === 0)" class="flex flex-col items-center justify-center w-full h-full space-y-2" :style="welcomeContainerMargin">
+                    <div class="flex flex-col items-center h-[500px] justify-center space-y-2 md:mt-24">
+                        <div class="bg-white border-1 rounded-[50%] w-12 h-12 flex justify-center items-center">
                             <img class="flex w-8 h-8 min-w-0 min-h-0" src="https://freelogopng.com/images/all_img/1681038325chatgpt-logo-transparent.png">
                         </div>
                         <div>
-                            <p id="topText" class="flex text-white text-2xl">How can I help you today?</p>
+                            <p class="flex text-white text-2xl">How can I help you today?</p>
                         </div>
                     </div>
                     <div class="flex w-full justify-center pb-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-1 w-[46rem] text-white h-full min-h-0 min-w-0 justify-center items-center mx-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 w-[46rem] text-white h-full min-h-0 min-w-0 justify-center items-center mx-4">
                             <button class="min-w-0 flex flex-col justify-center p-4 border border-white/[.15] bg-[#212121] rounded-xl text-left text-xs hover:bg-white hover:bg-opacity-20" v-for="prompt in recommendedPropmts" :key="prompt.id" @click="sendRecPrompt(prompt)">
                                 <h1 class="font-bold">{{prompt.title}}</h1>
-                                <p class="text-white/[.45]">{{ prompt.text }}</p>
+                                <p class="text-white/[.45] text-xs truncate w-full">{{ prompt.text }}</p>
                             </button>
                         </div>
                     </div>
@@ -96,24 +96,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div v-else  class="w-full h-full py-4 flex justify-center min-w-0 items-start min-w-0">
-                    
-                    <div class="w-full h-full flex flex-col items-center min-w-0 overflow-y-scroll overflow-x-hidden space-y-8">
-                        <div class="flex w-[44rem] h-auto space-x-3" v-for="mess in ourArray(shownChatName).messages" :key="mess.id">
-                            <img class="rounded-xl w-6 h-6 mt-[0.07rem]" :src="userById(mess.userId).avatar"> 
-                            <div class="flex flex-col justify-start space-y-2">
-                                <p class="font-semibold text-white">
-                                    {{ userById(mess.userId).userName }}
-                                </p>
-                                <p class="text-white" v-html="replaceCodeWithHTML(mess.textMessage)"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+                
             </div>
             
         </div>
-        <div class="w-full h-[90px] flex justify-center items-center min-w-0" @click="hideGptMenu">
+        <div class="w-full flex justify-center items-center min-w-0" @click="hideGptMenu" :style="parentContainerHeight">
             <div v-if="picked === 3.5" class="flex flex-col w-[48rem] h-[80px] justify-center items-center min-w-0 min-h-0 space-y-4 mb-4 mx-4 md:mx-0">
                 <div class="flex items-center w-full h-[55px] bg-[#34344200] text-white border border-white/[.15] rounded-2xl min-h-0 min-w-0">
                     <input class="w-full h-full bg-[#34344200] outline-none pl-[15px] min-w-0 min-h-0" type="text" placeHolder="Message your GPT" v-model="userMessage" @keyup.enter="send(shownChatName)">
@@ -125,10 +112,10 @@
                     <p class="text-xs text-gray-300 min-w-0 min-h-0">ChatGPT can make mistakes. Consider checking important information.</p>
                 </div>
             </div>
-            <div v-else class="flex flex-col w-[48rem] h-[80px] justify-center items-center min-w-0 min-h-0 mb-4 space-y-4 mb-4 mx-4 md:mx-0">
-                <div class="flex items-center w-full h-[55px] bg-[#34344200] text-white border border-white/[.15] rounded-2xl min-h-0 min-w-0" :style="containerHeight">
-                    <div class="flex ml-4 mt-4" v-show="fileReady">
-                        <div class="flex w-56 h-14 border border-white/[.25] rounded-xl bg-[#34344200] text-white place-items-center" @mouseenter="deleteButton = true" @mouseleave="deleteButton = false">
+            <div v-else class="flex w-[48rem] justify-center flex-col items-center min-h-0 space-y-4 mb-4 min-w-0 mx-4 md:mx-0">
+                <div class="flex bg-[#34344200]  w-full text-white border border-white/[.15] rounded-2xl flex-col" :style="containerHeight">
+                    <div class="flex ml-4 mt-2" v-show="fileReady">
+                        <div class="flex w-56 items-center h-14 border border-white/[.25] rounded-xl bg-[#34344200] text-white" @mouseenter="deleteButton = true" @mouseleave="deleteButton = false">
                             <div  v-show="deleteButton" class="absolute mb-12 ml-52 border bg-[#414141] border-white/[.25] rounded-xl w-5 h-5 flex justify-center">
                                 <button @click="deleteChosenFile">
                                     <span class="flex place-items-center text-xs">X</span>
@@ -145,7 +132,7 @@
                     <div class="flex justify-center place-items-center w-full h-full" :style="margingWithFiles">
                         <input type="file" id="fileInput" accept=".pdf" style="display: none;">
                         <button class="ml-3" @click="chooseFile">
-                            <img class="flex w-9 h-6" :src="'src/assets/paperlclip.png'">
+                            <img class="flex w-9 h-6" src='/src/assets/paperlclip.png'>
                         </button>
                         <input class="w-full border-box h-[44px] bg-[#34344200] p-[10px]" type="text" placeHolder="Message your GPT" v-model="userMessage" @keyup.enter="sendNewGpt(shownChatName)" style="outline: none">
                         <button :class="lightTheButton" class="flex place-items-center justify-center  w-9 h-9 rounded-xl mr-3" id="myButtonS" type="button" @click="sendNewGpt(shownChatName)">
@@ -178,6 +165,8 @@ export default {
             picked: 3.5,
             fileReady: false,
             containerHeight: 'height: 55px',
+            parentContainerHeight: 'height: 90px',
+            welcomeContainerMargin: 'margin-bottom: 0rem',
             margingWithFiles: 'margin-top: 0rem',
             deleteButton: false,
             recommendedPropmts: [{title: 'Compare design principles', text: 'for mobile apps and desktop software'}, {title:'Brainstorm content ideas', text: 'for my new podcast on urban design'}, {title: 'Explain airplane turbulance', text: 'to someone who has never flown before'}, {title: 'Write an email', text: 'requesting a deadline extension for my project'}],
@@ -298,6 +287,8 @@ export default {
             let uploadButton = document.getElementById('fileInput');
             let chosenFile = document.getElementById('chosen-file');
             let fileName = document.getElementById('file-name'); 
+            this.parentContainerHeight = 'height: 90px';
+            this.welcomeContainerMargin = 'margin-bottom: 0rem';
             this.containerHeight = 'height: 55px';
             chosenFile.removeAttribute("src");
             fileName.textContent = null;
@@ -313,6 +304,8 @@ export default {
             uploadButton.onchange = () => {
                 let reader = new FileReader();
                 this.fileReady = true;
+                this.parentContainerHeight = 'height: 160px';
+                this.welcomeContainerMargin = 'margin-bottom: 3.7rem';
                 this.containerHeight = 'height: 125px';
                 reader.readAsDataURL(uploadButton.files[0]);
                 reader.onload = () => {

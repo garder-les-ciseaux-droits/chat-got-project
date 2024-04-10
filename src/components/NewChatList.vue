@@ -188,9 +188,14 @@ export default {
             // console.log(buttons[buttons.length - 1])
         },
         deleteChat(index) {
+            
             this.dataHistory.data.splice(index, 1);
             this.deleteButtons.fill(false);
-            this.visibleChatName = 'Welcome';
+            setTimeout(() => {
+                this.visibleChatName = 'Welcome';
+            }, 0);
+            console.log(this.visibleChatName)
+            
         },
         showChatList(){
             const sideBarCon = document.getElementById('sidebarContainer')
@@ -249,7 +254,7 @@ export default {
             if(newVal > oldVal){
                 // setTimeout(this.afterButtonAdded, 0);
                 this.visibleChatName = this.dataHistory.data.at(-1).chatName
-               
+                console.log(this.visibleChatName)
                 
             }   
             
