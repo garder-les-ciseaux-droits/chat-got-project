@@ -152,6 +152,7 @@
 <script>
 import axios from "axios"
 import json from '/src/assets/dataHistory.json'
+import openai from '/newBackend/useOpenAi.js'
 export default {
     props: {
         shownChatName: String,
@@ -160,6 +161,8 @@ export default {
         return {
             userMessage: '',
             dataHistory: json,
+            apiKey: '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',
+            endpoint: 'https://api.openai.com/v1/chat/completions',
             text: "Hello, this is your script: ```print(123)```. Do you like it?",
             gptModulesView: false,
             picked: 3.5,
@@ -181,7 +184,7 @@ export default {
           return this.dataHistory.users.find(u => u.id === userId );
         },
        
-        sendNewGpt(currentChat) {
+        async sendNewGpt(currentChat) {
             const currentDate = new Date();
             if(currentChat != 'Welcome'){
                 if(this.userMessage != '') {
@@ -197,16 +200,24 @@ export default {
 
                    
 
-                    let ask = this.userMessage;
-
-                    let preparedAsk = ask.replace(/\s+/g, '+');
-
-                    axios.get(`http://127.0.0.1:7770/user/?user=${preparedAsk}`)
-                    .then(response => curChat.messages.push({userId: 2, textMessage: response.data.Message}))
-                    .catch(error => console.log('Sending error:', error))
-
-
+                    
                     this.userMessage = ''
+                    
+                    let ask = this.userMessage;
+                    const chatCompletion = await openai.chat.completions.create({
+                        messages: [{role: 'user', content: ask }],
+                        model: 'gpt-3.5-turbo'
+                    })
+                    
+                    curChat.messages.push({userId: 2, textMessage: chatCompletion.choices[0].message.content})
+                    // let preparedAsk = ask.replace(/\s+/g, '+');
+
+                    // axios.get(`http://127.0.0.1:7770/user/?user=${preparedAsk}`)
+                    // .then(response => curChat.messages.push({userId: 2, textMessage: response.data.Message}))
+                    // .catch(error => console.log('Sending error:', error))
+
+
+                    // this.userMessage = ''
                 }
             }
             else {
@@ -225,23 +236,28 @@ export default {
                     
                     const curChat = this.dataHistory.data.find(c => c.chatName === name)
 
-                    
+                    this.userMessage = ''
                     
                     let ask = this.userMessage;
+                    const chatCompletion = await openai.chat.completions.create({
+                        messages: [{role: 'user', content: ask }],
+                        model: 'gpt-3.5-turbo'
+                    })
+                    
+                    curChat.messages.push({userId: 2, textMessage: chatCompletion.choices[0].message.content})
+                    // let preparedAsk = ask.replace(/\s+/g, '+');
 
-                    let preparedAsk = ask.replace(/\s+/g, '+');
-
-                    axios.get(`http://127.0.0.1:7770/user/?user=${preparedAsk}`)
-                    .then(response => curChat.messages.push({userId: 2, textMessage: response.data.Message}))
-                    .catch(error => console.log('Sending error:', error))
-                    this.userMessage = ''
+                    // axios.get(`http://127.0.0.1:7770/user/?user=${preparedAsk}`)
+                    // .then(response => curChat.messages.push({userId: 2, textMessage: response.data.Message}))
+                    // .catch(error => console.log('Sending error:', error))
+                    
 
                 }
             }
 
 
         },
-        send(currentChat) {
+        async send(currentChat) {
             const currentDate = new Date();
             if(currentChat != 'Welcome'){
                 if(this.userMessage != '') {
@@ -250,13 +266,21 @@ export default {
 
                 let ask = this.userMessage;
 
-                let preparedAsk = ask.replace(/\s+/g, '+');
+                // let preparedAsk = ask.replace(/\s+/g, '+');
 
+                this.userMessage = '';
+                const chatCompletion = await openai.chat.completions.create({
+                        messages: [{role: 'user', content: ask }],
+                        model: 'gpt-3.5-turbo'
+                    })
+                    
+                curChat.messages.push({userId: 2, textMessage: chatCompletion.choices[0].message.content})
                 
-                axios.get(`http://127.0.0.1:7770/user/?user=${preparedAsk}`)
-                .then(response => curChat.messages.push({userId: 2, textMessage: response.data.Message}))
-                .catch(error => console.log('Sending error:', error))
-                this.userMessage = ''
+
+                // axios.get(`http://127.0.0.1:7770/user/?user=${preparedAsk}`)
+                // .then(response => curChat.messages.push({userId: 2, textMessage: response.data.Message}))
+                // .catch(error => console.log('Sending error:', error))
+               
                 }
             }
             else {
@@ -271,14 +295,20 @@ export default {
                     
                     
                     let ask = this.userMessage;
+                    this.userMessage = '';
+                    // let preparedAsk = ask.replace(/\s+/g, '+');
+                    const chatCompletion = await openai.chat.completions.create({
+                        messages: [{role: 'user', content: ask }],
+                        model: 'gpt-3.5-turbo'
+                    })
+                    
+                    curChat.messages.push({userId: 2, textMessage: chatCompletion.choices[0].message.content})
 
-                    let preparedAsk = ask.replace(/\s+/g, '+');
+                    // axios.get(`http://127.0.0.1:7770/user/?user=${preparedAsk}`)
+                    // .then(response => curChat.messages.push({userId: 2, textMessage: response.data.Message}))
+                    // .catch(error => console.log('Sending error:', error))
 
-                    axios.get(`http://127.0.0.1:7770/user/?user=${preparedAsk}`)
-                    .then(response => curChat.messages.push({userId: 2, textMessage: response.data.Message}))
-                    .catch(error => console.log('Sending error:', error))
-
-                    this.userMessage = ''
+                    
 
                 }
             }
@@ -334,7 +364,8 @@ export default {
         },
         replaceCodeWithHTML(text){
           
-            let parts = text.split(/```(.*?)\```/);
+            text = String(text);
+            let parts = text.split(/```(.*?)\```/s);
 
             
             let result = "";
